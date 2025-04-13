@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseTable from './components/ExpenseTable';
 import SearchBar from './components/SearchBar';
-import './App.css';
+import './App.css'; // if you are using CSS
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -13,13 +13,16 @@ function App() {
   };
 
   const deleteExpense = (id) => {
-    setExpenses(expenses.filter(exp => exp.id !== id));
+    const updated = expenses.filter(exp => exp.id !== id);
+    setExpenses(updated);
   };
 
-  const filteredExpenses = expenses.filter(exp =>
+  const filteredExpenses = expenses.filter((exp) =>
     exp.description.toLowerCase().includes(search.toLowerCase()) ||
     exp.category.toLowerCase().includes(search.toLowerCase())
   );
+
+  const total = filteredExpenses.reduce((sum, item) => sum + item.amount, 0);
 
   return (
     <div className="container">
@@ -27,6 +30,7 @@ function App() {
       <SearchBar search={search} setSearch={setSearch} />
       <ExpenseForm onAddExpense={addExpense} />
       <ExpenseTable expenses={filteredExpenses} onDelete={deleteExpense} />
+      <h3>Total: ${total.toFixed(2)}</h3>
     </div>
   );
 }
